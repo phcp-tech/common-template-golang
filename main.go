@@ -20,11 +20,11 @@ import (
 	"template/adapter"
 	"template/pkg/injector"
 
-	"gitlab.com/phcp-common/library-golang/app"
-	"gitlab.com/phcp-common/library-golang/env"
-	libGin "gitlab.com/phcp-common/library-golang/gin"
-	"gitlab.com/phcp-common/library-golang/httpserver"
-	"gitlab.com/phcp-common/library-golang/log"
+	"github.com/phcp-tech/common-library-golang/app"
+	"github.com/phcp-tech/common-library-golang/env"
+	libGin "github.com/phcp-tech/common-library-golang/gin"
+	"github.com/phcp-tech/common-library-golang/httpserver"
+	"github.com/phcp-tech/common-library-golang/log"
 
 	"github.com/gin-gonic/gin"
 )

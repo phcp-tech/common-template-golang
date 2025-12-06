@@ -22,10 +22,10 @@ import (
 	"template/pkg/dto"
 	"template/pkg/injector"
 
-	libDto "gitlab.com/phcp-common/library-golang/dto"
-	"gitlab.com/phcp-common/library-golang/errorcode"
-	"gitlab.com/phcp-common/library-golang/log"
-	"gitlab.com/phcp-common/library-golang/util"
+	libDto "github.com/phcp-tech/common-library-golang/dto"
+	"github.com/phcp-tech/common-library-golang/errorcode"
+	"github.com/phcp-tech/common-library-golang/log"
+	"github.com/phcp-tech/common-library-golang/util"
 
 	"github.com/gin-gonic/gin"
 )

@@ -62,7 +62,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "description": "200,0,1: success; others: failed",
+                    "description": "0: success; others: failed",
                     "type": "integer"
                 },
                 "data": {
@@ -78,6 +78,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
+                    "description": "0: success; others: failed",
                     "type": "integer"
                 },
                 "data": {

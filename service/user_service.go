@@ -18,7 +18,7 @@ import (
 	"template/infra/dao"
 	"template/pkg/dto"
 
-	libDto "gitlab.com/phcp-common/library-golang/dto"
+	libDto "github.com/phcp-tech/common-library-golang/dto"
 )
 
 type UserService struct {

@@ -5,13 +5,13 @@ go 1.25.0
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/wire v0.6.0
+	github.com/phcp-tech/common-library-golang v1.10.31
 	github.com/swaggo/files v1.0.0
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.10
-	gitlab.com/phcp-common/library-golang v1.10.20
 )
 
-//replace gitlab.com/phcp-common/library-golang => ../library-golang
+//replace github.com/phcp-tech/common-library-golang => ../library-golang
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect

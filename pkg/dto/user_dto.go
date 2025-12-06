@@ -17,7 +17,7 @@ package dto
 import (
 	"template/domain/model"
 
-	libDto "gitlab.com/phcp-common/library-golang/dto"
+	libDto "github.com/phcp-tech/common-library-golang/dto"
 )
 
 // Define User parameters for query list.

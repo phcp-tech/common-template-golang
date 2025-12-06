@@ -17,7 +17,7 @@ package injector
 import (
 	"template/service"
 
-	"gitlab.com/phcp-common/library-golang/log"
+	"github.com/phcp-tech/common-library-golang/log"
 )
 
 var UserServiceImpl *service.UserService
