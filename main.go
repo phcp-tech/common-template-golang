@@ -32,10 +32,10 @@ import (
 func main() {
 	// step 1: initial config file
 	if err := env.InitEnv("config/app.toml"); err != nil {
-		log.Errorf("initial environment config file failed: %s", err.Error())
+		log.Errorf("Initial environment config file failed: %s", err.Error())
 		os.Exit(1)
 	}
-	log.Info("initial environment config file successful.")
+	log.Info("Initial environment config file successful.")
 
 	// step 2: inject all implements
 	injector.InjectServices()
@@ -47,7 +47,7 @@ func main() {
 	// step 4: start http server
 	go func(r *gin.Engine) {
 		if err := httpserver.Startup(r, env.Env().String("http.server.port")); err != nil {
-			log.Errorf("startup http server failed: %s", err.Error())
+			log.Errorf("Startup http server failed: %s", err.Error())
 			os.Exit(1)
 		}
 	}(router)

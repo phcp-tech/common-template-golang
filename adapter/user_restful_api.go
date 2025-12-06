@@ -34,7 +34,7 @@ import (
 func Mount(router *gin.Engine) {
 	MountUser(router)
 	MountSwagger(router)
-	log.Info("mount all RESTful APIs successful.")
+	log.Info("Mount all RESTful APIs successful.")
 }
 
 // MountUser
