@@ -1,5 +1,5 @@
 [app]
-name = "Template User"
+name = "Template"
 version = "1.0.0"
 # run mode: vm|aws_lambda
 runmode = "vm"
