@@ -4,6 +4,7 @@
 # RUN apk add -y --no-cache libc6-compat
 # FROM debian:12.2-slim
 FROM golang:1.25.0-bookworm AS builder
+MAINTAINER Gordon Wang@phcp-tech
 
 # Install git
 RUN apt-get update && \
