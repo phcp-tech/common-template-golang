@@ -11,7 +11,7 @@ require (
 	github.com/swaggo/swag v1.8.10
 )
 
-//replace github.com/phcp-tech/common-library-golang => ../library-golang
+//replace github.com/phcp-tech/common-library-golang => ../common-library-golang
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
