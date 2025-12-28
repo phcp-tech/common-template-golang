@@ -16,15 +16,15 @@ package model
 
 // User domain model
 type User struct {
-	Id       uint64 `json:"id,omitempty"`
-	Username string `json:"username,omitempty"`
-	Nickname string `json:"nickname,omitempty"`
-	Email    string `json:"email,omitempty"`
-	Kind     string `json:"kind,omitempty" validate:"omitempty,oneof=Reader Author Admin"`
-	Status   int    `json:"status,omitempty"`
+	Id       uint64 `gorm:"primaryKey" json:"id,omitempty"`
+	Username string `gorm:"uniqueIndex;size:50;not null" json:"username,omitempty" validate:"omitempty,min=0,max=50"`
+	Nickname string `gorm:"size:50" json:"nickname,omitempty" validate:"omitempty,min=0,max=50"`
+	Email    string `gorm:"uniqueIndex;size:50;not null" json:"email,omitempty" validate:"omitempty,email,min=0,max=50"`
+	Kind     string `gorm:"index;size:40" json:"kind,omitempty" validate:"omitempty,min=0,max=40"`
+	Status   int    `gorm:"default:1" json:"status,omitempty" validate:"omitempty,gte=0,lte=3"`
 }
 
 // Define User table name
 func (h *User) TableName() string {
-	return "users.users"
+	return "knw_users.temp_users"
 }

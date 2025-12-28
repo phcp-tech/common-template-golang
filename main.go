@@ -18,12 +18,15 @@ import (
 	"os"
 
 	"template/adapter"
+	"template/domain/model"
 	"template/pkg/injector"
 
 	"github.com/phcp-tech/common-library-golang/app"
+	"github.com/phcp-tech/common-library-golang/db"
 	"github.com/phcp-tech/common-library-golang/env"
 	libGin "github.com/phcp-tech/common-library-golang/gin"
 	"github.com/phcp-tech/common-library-golang/httpserver"
+	libInjector "github.com/phcp-tech/common-library-golang/injector"
 	"github.com/phcp-tech/common-library-golang/log"
 
 	"github.com/gin-gonic/gin"
@@ -38,13 +41,17 @@ func main() {
 	log.Info("Initial environment config file successful.")
 
 	// step 2: inject all implements
+	libInjector.InjectInfrastructures()
 	injector.InjectServices()
 
-	// step 3: initial gin and mount controller/pprof
+	// step 3: auto migrate.
+	db.AutoMigrate("", &model.User{})
+
+	// step 4: initial gin and mount controller/pprof
 	router := libGin.InitGin()
 	adapter.Mount(router)
 
-	// step 4: start http server
+	// step 5: start http server
 	go func(r *gin.Engine) {
 		if err := httpserver.Startup(r, env.Env().String("http.server.port")); err != nil {
 			log.Errorf("Startup http server failed: %s", err.Error())
@@ -52,12 +59,12 @@ func main() {
 		}
 	}(router)
 
-	// step 5: Log for application start successful
+	// step 6: Log for application start successful
 	log.Infof("%s start successful, version is %s, environment is %s.",
 		env.Env().String("app.name"),
 		env.Env().String("app.version"),
 		env.Env().String("app.env.value"))
 
-	// step 6: waiting for graceful exit
+	// step 7: waiting for graceful exit
 	app.WatingForExitSignal()
 }

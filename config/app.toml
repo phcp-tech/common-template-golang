@@ -33,7 +33,7 @@ server.port = "8001"
 [db]
 enable = true
 # database sourece: postgres|mysql|sqlite
-source = "sqlite"
+source = "postgres"
 file = "sqlite.db"
 host = "localhost"
 port = "5432"
