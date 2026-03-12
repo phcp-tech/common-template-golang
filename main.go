@@ -53,7 +53,7 @@ func main() {
 
 	// step 5: start http server
 	go func(r *gin.Engine) {
-		if err := httpserver.Startup(r, env.Env().String("http.server.port")); err != nil {
+		if err := httpserver.Startup(r, env.Env().String("http.server.port"), "", ""); err != nil {
 			log.Errorf("Startup http server failed: %s", err.Error())
 			os.Exit(1)
 		}
