@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/wire v0.6.0
-	github.com/phcp-tech/common-library-golang v1.11.1
+	github.com/phcp-tech/common-library-golang v1.11.4
 	github.com/swaggo/files v1.0.0
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.10
