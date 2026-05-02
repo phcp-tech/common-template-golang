@@ -41,7 +41,7 @@ This template follows the standard Go project layout, making it easy to start ne
 - go mod tidy
 
 **2. Generate inject files**
-- wire ./...
+- wire ./pkg/injector
 
 **3. Generate swagger files**
 - swag init
