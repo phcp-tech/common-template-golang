@@ -12,28 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package adapter
 
 import (
-	"os"
-
-	"github.com/phcp-tech/common-library-golang/app"
-	"github.com/phcp-tech/common-library-golang/env"
-	"github.com/phcp-tech/common-library-golang/log"
+	"template/service"
 )
 
-func main() {
-	// step 1: initial config file
-	if err := env.InitEnv("config/app.toml"); err != nil {
-		log.Errorf("Initial environment config file failed: %s", err.Error())
-		os.Exit(1)
-	}
-	log.Info("Initial environment config file successful.")
+// Svcs is the package-level service registry, set by application.go at startup.
+var Svcs *Services
 
-	// step 2: wire and start application
-	application := NewApplication()
-	application.Start()
-
-	// step 3: waiting for graceful exit
-	app.WatingForExitSignal()
+// Services holds all service instances for use by REST handlers.
+type Services struct {
+	UserService *service.UserService
 }

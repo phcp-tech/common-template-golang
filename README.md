@@ -40,16 +40,13 @@ This template follows the standard Go project layout, making it easy to start ne
 **1. Update dependency**
 - go mod tidy
 
-**2. Generate inject files**
-- wire ./pkg/injector
-
-**3. Generate swagger files**
+**2. Generate swagger files**
 - swag init
 
 visit http://localhost:8001/swagger/index.html
 
-**4. Build**
+**3. Build**
 - go build
 
-**5. Run**
+**4. Run**
 - ./template

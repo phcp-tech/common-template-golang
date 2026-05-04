@@ -20,7 +20,6 @@ import (
 	"strings"
 
 	"template/pkg/dto"
-	"template/pkg/injector"
 
 	libDto "github.com/phcp-tech/common-library-golang/dto"
 	"github.com/phcp-tech/common-library-golang/errorcode"
@@ -73,7 +72,7 @@ func getUserList(c *gin.Context) {
 	}
 
 	// get user list from service
-	if user, err := injector.UserServiceImpl.GetList(&listPara); err == nil {
+	if user, err := Svcs.UserService.GetList(&listPara); err == nil {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
 			Code: errorcode.API_CODE_SUCCESS,
 			Data: user})
