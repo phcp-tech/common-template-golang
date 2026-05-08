@@ -22,7 +22,7 @@ import (
 	"template/infra/dao"
 	"template/service"
 
-	libApp "github.com/phcp-tech/common-library-golang/app"
+	"github.com/phcp-tech/common-library-golang/application"
 	"github.com/phcp-tech/common-library-golang/db"
 	"github.com/phcp-tech/common-library-golang/env"
 	libGin "github.com/phcp-tech/common-library-golang/gin"
@@ -31,6 +31,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
+// compile-time interfae check
+var _ application.IApplication = (*Application)(nil)
 
 type Application struct {
 	userService *service.UserService
@@ -44,7 +47,7 @@ func NewApplication() *Application {
 }
 
 func (app *Application) initInfrastructures() {
-	libApp.InitInfrastructures()
+	application.InitInfrastructures()
 }
 
 func (app *Application) initServices() {
@@ -54,7 +57,7 @@ func (app *Application) initServices() {
 
 	// inject services to adapter layer for RESTful API
 	adapter.Svcs = &adapter.Services{UserService: app.userService}
-	log.Info("Init all services successful.")
+	log.Info("All services initialized successfully.")
 }
 
 func (app *Application) Start() {
@@ -78,4 +81,8 @@ func (app *Application) Start() {
 		env.Env().String("app.name"),
 		env.Env().String("app.version"),
 		env.Env().String("app.env.value"))
+}
+
+func (app *Application) Shutdown(sig os.Signal) {
+	application.Shutdown(sig)
 }
