@@ -32,6 +32,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// compile-time interfae check
+var _ application.IApplication = (*Application)(nil)
+
 type Application struct {
 	userService *service.UserService
 }
