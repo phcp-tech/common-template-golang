@@ -57,7 +57,7 @@ func (app *Application) initServices() {
 
 	// inject services to adapter layer for RESTful API
 	adapter.Svcs = &adapter.Services{UserService: app.userService}
-	log.Info("Init all services successful.")
+	log.Info("All services initialized successfully.")
 }
 
 func (app *Application) Start() {
