@@ -17,7 +17,7 @@ package main
 import (
 	"os"
 
-	"github.com/phcp-tech/common-library-golang/app"
+	"github.com/phcp-tech/common-library-golang/application"
 	"github.com/phcp-tech/common-library-golang/env"
 	"github.com/phcp-tech/common-library-golang/log"
 )
@@ -31,9 +31,9 @@ func main() {
 	log.Info("Initial environment config file successful.")
 
 	// step 2: wire and start application
-	application := NewApplication()
-	application.Start()
+	app := NewApplication()
+	app.Start()
 
 	// step 3: waiting for graceful exit
-	app.WatingForExitSignal()
+	application.WaitingForExitSignal(app)
 }
