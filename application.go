@@ -23,7 +23,7 @@ import (
 	"template/service"
 
 	"github.com/phcp-tech/common-library-golang/application"
-	"github.com/phcp-tech/common-library-golang/db"
+	db "github.com/phcp-tech/common-library-golang/dbgorm"
 	"github.com/phcp-tech/common-library-golang/env"
 	libGin "github.com/phcp-tech/common-library-golang/gin"
 	"github.com/phcp-tech/common-library-golang/httpserver"
