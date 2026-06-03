@@ -192,8 +192,8 @@ github.com/pelletier/go-toml v1.9.5/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCko
 github.com/pelletier/go-toml/v2 v2.0.1/go.mod h1:r9LEWfGN8R5k0VXJ+0BkIe7MYkRdwZOjgMj2KwnJFUo=
 github.com/pelletier/go-toml/v2 v2.2.2 h1:aYUidT7k73Pcl9nb2gScu7NSrKCSHIDE89b3+6Wq+LM=
 github.com/pelletier/go-toml/v2 v2.2.2/go.mod h1:1t835xjRzz80PqgE6HHgN2JOsmgYu/h4qDAS4n929Rs=
-github.com/phcp-tech/common-library-golang v1.12.23 h1:HHJlAE89feY6gkPqYWe8Ioi/Z+bveg1rjQj5CczFDWs=
-github.com/phcp-tech/common-library-golang v1.12.23/go.mod h1:o5qZ4WR+nJvbKJpx710tEhfTK2abfLb7hseXsruSvD8=
+github.com/phcp-tech/common-library-golang-internal v1.13.0 h1:pYr32DbaTJg+P5fQ6tomMZWRmMJzrCIxwpVOJ3pwY5U=
+github.com/phcp-tech/common-library-golang-internal v1.13.0/go.mod h1:YgBPHfXDiFgmENmdY4a+oh6P+515MJi8VSsUav6fDHQ=
 github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e/go.mod h1:pJLUxLENpZxwdsKMEsNbx1VGcRFpLqf3715MtcvvzbA=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

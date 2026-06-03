@@ -4,13 +4,13 @@ go 1.26.1
 
 require (
 	github.com/gin-gonic/gin v1.10.1
-	github.com/phcp-tech/common-library-golang v1.12.23
+	github.com/phcp-tech/common-library-golang-internal v1.13.0
 	github.com/swaggo/files v1.0.0
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.10
 )
 
-//replace github.com/phcp-tech/common-library-golang => ../common-library-golang
+//replace github.com/phcp-tech/common-library-golang-internal => ../common-library-golang-internal
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect

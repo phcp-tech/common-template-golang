@@ -17,9 +17,9 @@ package main
 import (
 	"os"
 
-	"github.com/phcp-tech/common-library-golang/application"
-	"github.com/phcp-tech/common-library-golang/env"
-	"github.com/phcp-tech/common-library-golang/log"
+	"github.com/phcp-tech/common-library-golang-internal/application"
+	"github.com/phcp-tech/common-library-golang-internal/env"
+	"github.com/phcp-tech/common-library-golang-internal/log"
 )
 
 func main() {

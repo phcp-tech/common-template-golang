@@ -108,7 +108,7 @@ config/       # Configuration files
 - **RESTful API**: Gin framework-based API with Swagger documentation
 - **Swagger Documentation**: Automatic API documentation generation
 - **Standard Patterns**: Follows best practices for Go microservices
-- **Common Library Integration**: Uses common-library-golang for shared utilities
+- **Common Library Integration**: Uses common-library-golang-internal for shared utilities
 
 ### Data Models
 Core entities:
@@ -133,7 +133,7 @@ Core entities:
 ## Development Notes
 
 1. **Swagger Documentation**: Automatically generated API documentation available at `/swagger/index.html`
-2. **Common Library**: Integrates with common-library-golang for shared utilities
+2. **Common Library**: Integrates with common-library-golang-internal for shared utilities
 3. **Standard Structure**: Follows industry best practices for Go microservices
 4. **Extensible Design**: Easily extendable for new features and services
 5. **Configuration Management**: Flexible configuration handling through `config/app.toml`
@@ -141,7 +141,7 @@ Core entities:
 ## Dependencies
 
 - `github.com/gin-gonic/gin` - Web framework
-- `github.com/phcp-tech/common-library-golang` - Common library (requires local replace)
+- `github.com/phcp-tech/common-library-golang-internal` - Common library (requires local replace)
 - `gorm.io/gorm` - ORM
 - `gorm.io/datatypes` - JSONB data type support
 - `github.com/swaggo/files` - Swagger file serving
