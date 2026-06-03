@@ -21,12 +21,12 @@ import (
 
 	"template/pkg/dto"
 
-	libDto "github.com/phcp-tech/common-library-golang/dto"
-	"github.com/phcp-tech/common-library-golang/errorcode"
-	"github.com/phcp-tech/common-library-golang/log"
-	"github.com/phcp-tech/common-library-golang/util"
+	libDto "github.com/phcp-tech/common-library-golang-internal/dto"
+	"github.com/phcp-tech/common-library-golang-internal/errorcode"
+	"github.com/phcp-tech/common-library-golang-internal/util"
 
 	"github.com/gin-gonic/gin"
+	"github.com/phcp-tech/common-library-golang/log"
 )
 
 // Mount all RESTful APIs

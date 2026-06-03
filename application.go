@@ -22,14 +22,14 @@ import (
 	"template/infra/dao"
 	"template/service"
 
-	"github.com/phcp-tech/common-library-golang/application"
-	db "github.com/phcp-tech/common-library-golang/dbgorm"
-	"github.com/phcp-tech/common-library-golang/env"
-	libGin "github.com/phcp-tech/common-library-golang/gin"
-	"github.com/phcp-tech/common-library-golang/httpserver"
-	"github.com/phcp-tech/common-library-golang/log"
+	"github.com/phcp-tech/common-library-golang-internal/application"
+	db "github.com/phcp-tech/common-library-golang-internal/dbgorm"
+	libGin "github.com/phcp-tech/common-library-golang-internal/gin"
+	"github.com/phcp-tech/common-library-golang-internal/httpserver"
 
 	"github.com/gin-gonic/gin"
+	"github.com/phcp-tech/common-library-golang/env"
+	"github.com/phcp-tech/common-library-golang/log"
 )
 
 // compile-time interfae check
