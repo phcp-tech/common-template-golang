@@ -24,12 +24,12 @@ import (
 
 	"github.com/phcp-tech/common-library-golang-internal/application"
 	db "github.com/phcp-tech/common-library-golang-internal/dbgorm"
-	"github.com/phcp-tech/common-library-golang-internal/env"
 	libGin "github.com/phcp-tech/common-library-golang-internal/gin"
 	"github.com/phcp-tech/common-library-golang-internal/httpserver"
-	"github.com/phcp-tech/common-library-golang-internal/log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/phcp-tech/common-library-golang/env"
+	"github.com/phcp-tech/common-library-golang/log"
 )
 
 // compile-time interfae check
