@@ -13,9 +13,6 @@ env.prefix = "TM_"
 level = "INFO"
 path = "/var/log/template.log"
 writefile = false
-file.max.size = 100
-file.max.backups = 100
-file.max.age = 0
 
 [jwt]
 secret.code = "TOBE_REPLACED"
