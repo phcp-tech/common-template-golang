@@ -11,8 +11,6 @@ env.prefix = "TM_"
 [log]
 # one of: ERROR, WARN, INFO, DEBUG
 level = "INFO"
-path = "/var/log/template.log"
-writefile = false
 
 [jwt]
 secret.code = "TOBE_REPLACED"

@@ -15,6 +15,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/phcp-tech/common-library-golang-internal/application"
@@ -26,15 +27,20 @@ import (
 func main() {
 	// step 1: initial config file
 	if err := env.InitEnv("config/app.toml"); err != nil {
-		log.Errorf("Initial environment config file failed: %s", err.Error())
+		fmt.Printf("Initial environment config file failed: %s", err.Error())
 		os.Exit(1)
 	}
+
+	// step 2: initial log
+	log.InitLog(&log.Config{
+		Level: env.Env().String("log.level"),
+	})
 	log.Info("Initial environment config file successful.")
 
-	// step 2: wire and start application
+	// step 3: start application
 	app := NewApplication()
 	app.Start()
 
-	// step 3: waiting for graceful exit
+	// step 4: waiting for graceful exit
 	application.WaitingForExitSignal(app)
 }
