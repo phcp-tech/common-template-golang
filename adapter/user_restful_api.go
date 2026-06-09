@@ -26,14 +26,12 @@ import (
 	"github.com/phcp-tech/common-library-golang-internal/util"
 
 	"github.com/gin-gonic/gin"
-	"github.com/phcp-tech/common-library-golang/log"
 )
 
 // Mount all RESTful APIs
 func Mount(router *gin.Engine) {
 	MountUser(router)
 	MountSwagger(router)
-	log.Info("Mount all RESTful APIs successful.")
 }
 
 // MountUser

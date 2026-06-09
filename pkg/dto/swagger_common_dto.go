@@ -14,15 +14,22 @@
 
 package dto
 
-import (
-	"template/domain/model"
+import "template/domain/model"
 
-	libDto "github.com/phcp-tech/common-library-golang-internal/dto"
-)
-
-// Define User parameters for query list.
-type UserListPara struct {
-	libDto.PageParameter
-	model.User
+// those dtos only for swagger api doc, maybe repeated in other files
+// common dto
+type ResponseMessage struct {
+	Code    int    `json:"code"`              // 0: success; others: failed
+	Message string `json:"message,omitempty"` // omit in success response
+	Data    any    `json:"data,omitempty"`    // omit in failed response
 }
 
+// those dtos only for swagger api doc, maybe repeated in other files
+// special dto
+type UserListResp struct {
+	Code int `json:"code"` // 0: success; others: failed
+	Data struct {
+		Total int          `json:"total"`
+		List  []model.User `json:"list"`
+	} `json:"data"`
+}
