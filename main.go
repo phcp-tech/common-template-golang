@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
+	"strings"
 
 	"template/adapter"
 	"template/infra/dao"
@@ -81,7 +82,14 @@ func main() {
 	//defer service.Close() // ensure service resources are released before exit.
 
 	// step 6: initial gin router
-	router := libGin.InitGin(env.Env().Strings("cors.allow.origins"))
+	var origins []string
+	if strings.EqualFold(env.Env().String("app.env.value"), "prod") {
+		origins = env.Env().Strings("cors.allow.origins.prod")
+	} else {
+		// add localhost:port origins to non-prod environment, enable local development
+		origins = env.Env().Strings("cors.allow.origins.dev")
+	}
+	router := libGin.InitGin(origins)
 	adapter.Mount(router)
 
 	// step 7: load http server sequentially, start after all infrastructures and services are ready

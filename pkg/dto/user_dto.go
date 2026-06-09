@@ -17,7 +17,7 @@ package dto
 import (
 	"template/domain/model"
 
-	libDto "github.com/phcp-tech/common-library-golang-internal/dto"
+	libDto "github.com/phcp-tech/common-library-golang/dto"
 )
 
 // Define User parameters for query list.
@@ -25,4 +25,3 @@ type UserListPara struct {
 	libDto.PageParameter
 	model.User
 }
-

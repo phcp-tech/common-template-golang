@@ -21,9 +21,9 @@ import (
 
 	"template/pkg/dto"
 
-	libDto "github.com/phcp-tech/common-library-golang-internal/dto"
-	"github.com/phcp-tech/common-library-golang-internal/errorcode"
-	"github.com/phcp-tech/common-library-golang-internal/util"
+	libDto "github.com/phcp-tech/common-library-golang/dto"
+	"github.com/phcp-tech/common-library-golang/errorcode"
+	"github.com/phcp-tech/common-library-golang/validator"
 
 	"github.com/gin-gonic/gin"
 )
@@ -64,7 +64,7 @@ func getUserList(c *gin.Context) {
 	listPara.Kind = strings.TrimSpace(c.Query("kind"))
 
 	// validate list parameters
-	if err := util.Validator().Struct(&listPara); err != nil {
+	if err := validator.Validator().Struct(&listPara); err != nil {
 		c.JSON(http.StatusBadRequest, libDto.ResponseMessage{Code: http.StatusBadRequest, Message: err.Error()})
 		return
 	}
