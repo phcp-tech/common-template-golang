@@ -16,7 +16,8 @@ level = "INFO"
 secret.code = "TOBE_REPLACED"
 
 [cors]
-allow.origins = ["https://template.com"]
+allow.origins.prod = ["https://template.com"]
+allow.origins.dev = ["https://dev.template.com"]
 
 [http]
 # client config

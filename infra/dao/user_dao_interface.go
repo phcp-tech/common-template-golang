@@ -17,7 +17,7 @@ package dao
 import (
 	"template/pkg/dto"
 
-	libDto "github.com/phcp-tech/common-library-golang-internal/dto"
+	libDto "github.com/phcp-tech/common-library-golang/dto"
 )
 
 type IUserDao interface {
