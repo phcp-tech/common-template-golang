@@ -25,6 +25,7 @@ import (
 	"template/infra/dao"
 	"template/service"
 
+	"github.com/phcp-tech/common-library-golang/app"
 	db "github.com/phcp-tech/common-library-golang/dbsqlc/postgres"
 	dbLoader "github.com/phcp-tech/common-library-golang/dbsqlc/postgres/loader"
 	"github.com/phcp-tech/common-library-golang/env"
@@ -93,21 +94,22 @@ func main() {
 	adapter.Mount(router)
 
 	// step 7: load http server sequentially, start after all infrastructures and services are ready
-	runner, _ := httpserverLoader.LoadDefault(router)
+	httpServer, _ := httpserverLoader.LoadDefault(router)
 	defer func() {
 		ctx, cancel := context.WithTimeout(context.Background(), httpserver.DefaultShutdownTimeout)
 		defer cancel()
-		if err := runner.Shutdown(ctx); err != nil {
+		if err := httpServer.Shutdown(ctx); err != nil {
 			log.Errorf("http server shutdown failed: %s", err.Error())
 		}
 		log.Info("Http server has been shutdown.")
 	}()
 
 	// step 8: log application start info
-	log.Infof("%s start successfully, version is %s, environment is %s.",
+	log.Infof("%s start successfully, version is %s, environment is %s, local ip address are %s.",
 		env.Env().String("app.name"),
 		env.Env().String("app.version"),
-		env.Env().String("app.env.value"))
+		env.Env().String("app.env.value"),
+		app.GetLocalIpAddress())
 
 	// step 9: wait for shutdown signal
 	shutdown.Wait()
