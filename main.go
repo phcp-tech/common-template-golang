@@ -19,54 +19,45 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
-	"strings"
 
 	"template/adapter"
 	"template/infra/dao"
 	"template/service"
 
+	"github.com/gin-gonic/gin"
 	"github.com/phcp-tech/common-library-golang/app"
 	db "github.com/phcp-tech/common-library-golang/dbsqlc/postgres"
 	dbLoader "github.com/phcp-tech/common-library-golang/dbsqlc/postgres/loader"
 	"github.com/phcp-tech/common-library-golang/env"
 	libGin "github.com/phcp-tech/common-library-golang/gin"
 	"github.com/phcp-tech/common-library-golang/httpserver"
-	httpserverLoader "github.com/phcp-tech/common-library-golang/httpserver/loader"
 	"github.com/phcp-tech/common-library-golang/log"
 	"github.com/phcp-tech/common-library-golang/shutdown"
 	"golang.org/x/sync/errgroup"
 )
 
 func main() {
-	// step 1: initial config file
+	// step 1: top-level recover to capture panics in main goroutine and record stack trace
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("panic in main: %v\nstack: %s", r, string(debug.Stack()))
+		}
+	}()
+
+	// step 2: initial config file
 	if err := env.InitEnv("config/app.toml"); err != nil {
 		fmt.Printf("Initial environment config file failed: %s", err.Error())
 		os.Exit(1)
 	}
 
-	// step 2: initial log
-	cfg := log.Config{
+	// step 3: initial log
+	log.InitLog(&log.Config{
 		Level: env.Env().String("log.level"),
-	}
-	if env.Env().String("log.file.path") != "" {
-		cfg.FilePath = env.Env().String("log.file.path")
-		cfg.MaxSizeMB = env.Env().Int("log.file.max.size")
-		cfg.MaxBackups = env.Env().Int("log.file.max.backups")
-		cfg.MaxAgeDays = env.Env().Int("log.file.max.age")
-		cfg.Compress = env.Env().Bool("log.file.compress")
-	}
-	log.InitLog(&cfg)
+	})
 	log.Info("Initial environment config and log successfully.")
 	defer func() {
 		log.Info("Log file has been closed, application exit.")
 		log.Close() // ensure flush logs before exit.
-	}()
-
-	// step 3: top-level recover to capture panics in main goroutine and record stack trace
-	defer func() {
-		if r := recover(); r != nil {
-			log.Errorf("panic in main: %v\n%s", r, string(debug.Stack()))
-		}
 	}()
 
 	// step 4: initial infrastructures
@@ -83,22 +74,23 @@ func main() {
 	//defer service.Close() // ensure service resources are released before exit.
 
 	// step 6: initial gin router
-	var origins []string
-	if strings.EqualFold(env.Env().String("app.env.value"), "prod") {
-		origins = env.Env().Strings("cors.allow.origins.prod")
-	} else {
-		// add localhost:port origins to non-prod environment, enable local development
-		origins = env.Env().Strings("cors.allow.origins.dev")
-	}
-	router := libGin.InitGin(origins)
+	router := libGin.InitGin(env.Env().Strings("cors.allow.origins"))
 	adapter.Mount(router)
 
 	// step 7: load http server sequentially, start after all infrastructures and services are ready
-	httpServer, _ := httpserverLoader.LoadDefault(router)
+	port := env.Env().String("http.server.port")
+	httpServer := httpserver.NewHttpServer(httpserver.Config{
+		Port: port,
+	})
+	go func(run httpserver.Runner, r *gin.Engine) {
+		if err := run.Start(r); err != nil {
+			log.Errorf("Startup http server failed: %s.", err.Error())
+			os.Exit(1) // exit if http server fails to start
+		}
+	}(httpServer, router)
+	log.Infof("Http server is running under Virtual Machine, listen on port %s.", port)
 	defer func() {
-		ctx, cancel := context.WithTimeout(context.Background(), httpserver.DefaultShutdownTimeout)
-		defer cancel()
-		if err := httpServer.Shutdown(ctx); err != nil {
+		if err := httpServer.Shutdown(context.Background()); err != nil {
 			log.Errorf("http server shutdown failed: %s", err.Error())
 		}
 		log.Info("Http server has been shutdown.")
