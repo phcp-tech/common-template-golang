@@ -16,8 +16,7 @@ level = "INFO"
 secret.code = "TOBE_REPLACED"
 
 [cors]
-allow.origins.prod = ["https://template.com"]
-allow.origins.dev = ["https://dev.template.com"]
+allow.origins = ["https://template.com"]
 
 [http]
 # client config
@@ -36,9 +35,7 @@ name = "TOBE_REPLACED"
 schema = "TOBE_REPLACED"
 username = "TOBE_REPLACED"
 password = "TOBE_REPLACED"
-max.open.conns = 100
-max.idle.conns = 25
-conn.max.lifetime = 60
-conn.max.idletime = 10
-auto.migrate = false
-mock.data= false
+max.open.conns = 3
+max.idle.conns = 1
+conn.max.lifetime = 10
+conn.max.idletime = 5

@@ -19,97 +19,101 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
-	"strings"
 
 	"template/adapter"
 	"template/infra/dao"
 	"template/service"
 
-	"github.com/phcp-tech/common-library-golang/app"
 	db "github.com/phcp-tech/common-library-golang/dbsqlc/postgres"
 	dbLoader "github.com/phcp-tech/common-library-golang/dbsqlc/postgres/loader"
 	"github.com/phcp-tech/common-library-golang/env"
 	libGin "github.com/phcp-tech/common-library-golang/gin"
 	"github.com/phcp-tech/common-library-golang/httpserver"
-	httpserverLoader "github.com/phcp-tech/common-library-golang/httpserver/loader"
 	"github.com/phcp-tech/common-library-golang/log"
+	"github.com/phcp-tech/common-library-golang/network"
 	"github.com/phcp-tech/common-library-golang/shutdown"
 	"golang.org/x/sync/errgroup"
 )
 
 func main() {
-	// step 1: initial config file
+	// step 1: top-level recover to capture panics in main goroutine and record stack trace
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("panic in main: %v\nstack: %s", r, string(debug.Stack()))
+		}
+	}()
+
+	// step 2: initial config file
 	if err := env.InitEnv("config/app.toml"); err != nil {
 		fmt.Printf("Initial environment config file failed: %s", err.Error())
 		os.Exit(1)
 	}
 
-	// step 2: initial log
-	cfg := log.Config{
+	// step 3: initial log
+	log.InitLog(&log.Config{
 		Level: env.Env().String("log.level"),
-	}
-	if env.Env().String("log.file.path") != "" {
-		cfg.FilePath = env.Env().String("log.file.path")
-		cfg.MaxSizeMB = env.Env().Int("log.file.max.size")
-		cfg.MaxBackups = env.Env().Int("log.file.max.backups")
-		cfg.MaxAgeDays = env.Env().Int("log.file.max.age")
-		cfg.Compress = env.Env().Bool("log.file.compress")
-	}
-	log.InitLog(&cfg)
-	log.Info("Initial environment config and log successfully.")
+	})
+	log.Info("Initial environment config and log successfully")
 	defer func() {
-		log.Info("Log file has been closed, application exit.")
+		log.Info("Log file has been closed, application exit")
 		log.Close() // ensure flush logs before exit.
 	}()
 
-	// step 3: top-level recover to capture panics in main goroutine and record stack trace
-	defer func() {
-		if r := recover(); r != nil {
-			log.Errorf("panic in main: %v\n%s", r, string(debug.Stack()))
-		}
-	}()
-
 	// step 4: initial infrastructures
-	initInfrastructures()
+	if err := initInfrastructures(); err != nil {
+		log.Errorf("Initial infrastructures failed: %s", err.Error())
+		os.Exit(1)
+	}
 	defer func() {
 		if conn := db.Default(); conn != nil {
 			conn.Close()
 		}
-		log.Info("Database has been closed.")
+		log.Info("Database has been closed")
 	}()
 
 	// step 5: initial services
-	initServices()
+	if err := initServices(); err != nil {
+		log.Errorf("Initial services failed: %s", err.Error())
+		os.Exit(1)
+	}
 	//defer service.Close() // ensure service resources are released before exit.
 
 	// step 6: initial gin router
-	var origins []string
-	if strings.EqualFold(env.Env().String("app.env.value"), "prod") {
-		origins = env.Env().Strings("cors.allow.origins.prod")
-	} else {
-		// add localhost:port origins to non-prod environment, enable local development
-		origins = env.Env().Strings("cors.allow.origins.dev")
-	}
-	router := libGin.InitGin(origins)
+	router := libGin.InitGin(env.Env().Strings("cors.allow.origins"))
 	adapter.Mount(router)
 
-	// step 7: load http server sequentially, start after all infrastructures and services are ready
-	httpServer, _ := httpserverLoader.LoadDefault(router)
+	// step 7: create http server runner, then start it in a goroutine
+	port := env.Env().String("http.server.port")
+	httpServer := httpserver.NewHttpServer(httpserver.Config{
+		Port: port,
+	})
+	log.Infof("Http server is running under Virtual Machine, listen on port %s", port)
 	defer func() {
-		ctx, cancel := context.WithTimeout(context.Background(), httpserver.DefaultShutdownTimeout)
-		defer cancel()
-		if err := httpServer.Shutdown(ctx); err != nil {
+		if err := httpServer.Shutdown(context.Background()); err != nil {
 			log.Errorf("http server shutdown failed: %s", err.Error())
 		}
-		log.Info("Http server has been shutdown.")
+		log.Info("Http server has been shutdown")
+	}()
+	// start http server in a separate goroutine, capture panics and log stack trace if any panic happens
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Panic in http server goroutine: %v\nstack: %s", r, string(debug.Stack()))
+				os.Exit(1)
+			}
+		}()
+		if err := httpServer.Start(router); err != nil {
+			log.Errorf("Http server start with error: %s", err.Error())
+			os.Exit(1)
+		}
 	}()
 
 	// step 8: log application start info
-	log.Infof("%s start successfully, version is %s, environment is %s, local ip address are %s.",
+	log.Infof("%s start successfully, version is %s, environment is %s, local ip address are %s",
 		env.Env().String("app.name"),
 		env.Env().String("app.version"),
 		env.Env().String("app.env.value"),
-		app.GetLocalIpAddress())
+		network.GetLocalIpAddress())
 
 	// step 9: wait for shutdown signal
 	shutdown.Wait()
@@ -118,27 +122,28 @@ func main() {
 }
 
 // initial infrastructures concurrently
-func initInfrastructures() {
+func initInfrastructures() error {
 	eg, _ := errgroup.WithContext(context.Background())
 	// load default database
 	eg.Go(func() error {
-		return dbLoader.LoadDefault()
+		return dbLoader.LoadFromEnv()
 	})
 
 	// wait for all infrastructures to be initialized
 	if err := eg.Wait(); err != nil {
-		log.Errorf("Init infrastructures failed, %s", err.Error())
-		os.Exit(1)
+		return err
 	}
-	log.Info("All infrastructures initialized successfully.")
+
+	log.Info("All infrastructures initialized successfully")
+	return nil
 }
 
 // initial services
-func initServices() {
-	// initialize services
-	userService := service.NewUserService(dao.NewUserDao())
-
+func initServices() error {
 	// inject services to adapter layer for RESTful API
+	userService := service.NewUserService(dao.NewUserDao())
 	adapter.Svcs = &adapter.Services{UserService: userService}
-	log.Info("All services initialized successfully.")
+
+	log.Info("All services initialized successfully")
+	return nil
 }
