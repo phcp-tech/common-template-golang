@@ -24,7 +24,6 @@ import (
 	"template/infra/dao"
 	"template/service"
 
-	"github.com/gin-gonic/gin"
 	db "github.com/phcp-tech/common-library-golang/dbsqlc/postgres"
 	dbLoader "github.com/phcp-tech/common-library-golang/dbsqlc/postgres/loader"
 	"github.com/phcp-tech/common-library-golang/env"
@@ -54,9 +53,9 @@ func main() {
 	log.InitLog(&log.Config{
 		Level: env.Env().String("log.level"),
 	})
-	log.Info("Initial environment config and log successfully.")
+	log.Info("Initial environment config and log successfully")
 	defer func() {
-		log.Info("Log file has been closed, application exit.")
+		log.Info("Log file has been closed, application exit")
 		log.Close() // ensure flush logs before exit.
 	}()
 
@@ -65,12 +64,11 @@ func main() {
 		log.Errorf("Initial infrastructures failed: %s", err.Error())
 		os.Exit(1)
 	}
-
 	defer func() {
 		if conn := db.Default(); conn != nil {
 			conn.Close()
 		}
-		log.Info("Database has been closed.")
+		log.Info("Database has been closed")
 	}()
 
 	// step 5: initial services
@@ -84,27 +82,34 @@ func main() {
 	router := libGin.InitGin(env.Env().Strings("cors.allow.origins"))
 	adapter.Mount(router)
 
-	// step 7: load http server sequentially, start after all infrastructures and services are ready
+	// step 7: create http server runner, then start it in a goroutine
 	port := env.Env().String("http.server.port")
 	httpServer := httpserver.NewHttpServer(httpserver.Config{
 		Port: port,
 	})
-	go func(run httpserver.Runner, r *gin.Engine) {
-		if err := run.Start(r); err != nil {
-			log.Errorf("Startup http server failed: %s.", err.Error())
-			os.Exit(1)
-		}
-	}(httpServer, router)
-	log.Infof("Http server is running under Virtual Machine, listen on port %s.", port)
+	log.Infof("Http server is running under Virtual Machine, listen on port %s", port)
 	defer func() {
 		if err := httpServer.Shutdown(context.Background()); err != nil {
 			log.Errorf("http server shutdown failed: %s", err.Error())
 		}
-		log.Info("Http server has been shutdown.")
+		log.Info("Http server has been shutdown")
+	}()
+	// start http server in a separate goroutine, capture panics and log stack trace if any panic happens
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Panic in http server goroutine: %v\nstack: %s", r, string(debug.Stack()))
+				os.Exit(1)
+			}
+		}()
+		if err := httpServer.Start(router); err != nil {
+			log.Errorf("Http server start with error: %s", err.Error())
+			os.Exit(1)
+		}
 	}()
 
 	// step 8: log application start info
-	log.Infof("%s start successfully, version is %s, environment is %s, local ip address are %s.",
+	log.Infof("%s start successfully, version is %s, environment is %s, local ip address are %s",
 		env.Env().String("app.name"),
 		env.Env().String("app.version"),
 		env.Env().String("app.env.value"),
@@ -126,11 +131,10 @@ func initInfrastructures() error {
 
 	// wait for all infrastructures to be initialized
 	if err := eg.Wait(); err != nil {
-		log.Errorf("Init infrastructures failed, %s", err.Error())
 		return err
 	}
 
-	log.Info("All infrastructures initialized successfully.")
+	log.Info("All infrastructures initialized successfully")
 	return nil
 }
 
@@ -140,6 +144,6 @@ func initServices() error {
 	userService := service.NewUserService(dao.NewUserDao())
 	adapter.Svcs = &adapter.Services{UserService: userService}
 
-	log.Info("All services initialized successfully.")
+	log.Info("All services initialized successfully")
 	return nil
 }
