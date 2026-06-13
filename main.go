@@ -99,12 +99,12 @@ func main() {
 		defer func() {
 			if r := recover(); r != nil {
 				log.Errorf("Panic in http server goroutine: %v\nstack: %s", r, string(debug.Stack()))
-				os.Exit(1)
+				shutdown.Trigger()
 			}
 		}()
 		if err := httpServer.Start(router); err != nil {
 			log.Errorf("Http server start with error: %s", err.Error())
-			os.Exit(1)
+			shutdown.Trigger()
 		}
 	}()
 
