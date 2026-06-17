@@ -4,11 +4,10 @@ go 1.26.1
 
 require (
 	github.com/gin-gonic/gin v1.10.1
-	github.com/phcp-tech/common-library-golang v0.1.12
+	github.com/phcp-tech/common-library-golang v0.1.15
 	github.com/swaggo/files v1.0.0
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.10
-	golang.org/x/sync v0.20.0
 )
 
 require (
@@ -25,6 +24,8 @@ require (
 )
 
 require (
+	github.com/aws/aws-lambda-go v1.54.0 // indirect
+	github.com/awslabs/aws-lambda-go-api-proxy v0.16.2 // indirect
 	github.com/bytedance/gopkg v0.1.3 // indirect
 	github.com/bytedance/sonic v1.15.0 // indirect
 	github.com/bytedance/sonic/loader v0.5.0 // indirect
@@ -73,6 +74,7 @@ require (
 	golang.org/x/arch v0.23.0 // indirect
 	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/net v0.51.0 // indirect
+	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.35.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
