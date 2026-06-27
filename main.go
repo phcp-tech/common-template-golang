@@ -35,10 +35,9 @@ import (
 
 func main() {
 	var router *gin.Engine
-
 	bootstrap.New().
-		Add(envComp.Component("config/app.toml")).
-		Add(logComp.Component()).
+		Add(envComp.Component("config/app.toml")). // 1st - env
+		Add(logComp.Component()).                  // 2nd - log
 		AddParallel(dbComp.Component()).
 		PreReady(initServices).
 		Add(ginComp.Component(func(r *gin.Engine) {
