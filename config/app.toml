@@ -27,8 +27,8 @@ server.port = "8001"
 
 [db]
 # database sourece: postgres|mysql|sqlite
+sqlite.path = "sqlite.db"
 source = "postgres"
-file = "sqlite.db"
 host = "localhost"
 port = "5432"
 name = "TOBE_REPLACED"

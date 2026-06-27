@@ -20,10 +20,14 @@ import (
 	"strings"
 
 	"template/pkg/dto"
+	"template/pkg/metrics"
 
 	libDto "github.com/phcp-tech/common-library-golang/dto"
+	db "github.com/phcp-tech/common-library-golang/dbsqlc/postgres"
 	"github.com/phcp-tech/common-library-golang/errorcode"
+	"github.com/phcp-tech/common-library-golang/health"
 	"github.com/phcp-tech/common-library-golang/validator"
+	"github.com/phcp-tech/common-library-golang/version"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,6 +43,23 @@ func MountUser(router *gin.Engine) *gin.Engine {
 	// Need JWT authorization.
 	r1 := router.Group("/usrapi/v1/users")
 	r1.GET("/list", getUserList)
+
+	// Don not need JWT authorization.
+	router.GET("/usrapi/v1/version", func(c *gin.Context) {
+		c.JSON(http.StatusOK, libDto.ResponseMessage{
+			Code: errorcode.API_CODE_SUCCESS,
+			Data: version.Get()})
+	})
+	router.GET("/usrapi/v1/healthz", func(c *gin.Context) {
+		c.JSON(http.StatusOK, libDto.ResponseMessage{
+			Code: errorcode.API_CODE_SUCCESS,
+			Data: health.Check(c.Request.Context(), db.HealthChecker())})
+	})
+	router.GET("/usrapi/v1/metrics", func(c *gin.Context) {
+		c.JSON(http.StatusOK, libDto.ResponseMessage{
+			Code: errorcode.API_CODE_SUCCESS,
+			Data: metrics.GetMetrics()})
+	})
 
 	return router
 }
