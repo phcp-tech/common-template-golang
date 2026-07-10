@@ -14,17 +14,14 @@
 
 package model
 
-// User domain model
+// User domain model. Column sizes/defaults/indexes previously expressed via
+// gorm tags now live directly in the real schema, managed independently of
+// this application (there is no migrate() step in main.go).
 type User struct {
-	Id       uint64 `gorm:"primaryKey" json:"id,omitempty"`
-	Username string `gorm:"uniqueIndex;size:50;not null" json:"username,omitempty" validate:"omitempty,min=0,max=50"`
-	Nickname string `gorm:"size:50" json:"nickname,omitempty" validate:"omitempty,min=0,max=50"`
-	Email    string `gorm:"uniqueIndex;size:50;not null" json:"email,omitempty" validate:"omitempty,email,min=0,max=50"`
-	Kind     string `gorm:"index;size:40" json:"kind,omitempty" validate:"omitempty,min=0,max=40"`
-	Status   int    `gorm:"default:1" json:"status,omitempty" validate:"omitempty,gte=0,lte=3"`
-}
-
-// Define User table name
-func (h *User) TableName() string {
-	return "knw_users.temp_users"
+	Id       int64  `db:"id" json:"id,omitempty"`
+	Username string `db:"username" json:"username,omitempty" validate:"omitempty,min=0,max=50"`
+	Nickname string `db:"nickname" json:"nickname,omitempty" validate:"omitempty,min=0,max=50"`
+	Email    string `db:"email" json:"email,omitempty" validate:"omitempty,email,min=0,max=50"`
+	Kind     string `db:"kind" json:"kind,omitempty" validate:"omitempty,min=0,max=40"`
+	Status   int    `db:"status" json:"status,omitempty" validate:"omitempty,gte=0,lte=3"`
 }

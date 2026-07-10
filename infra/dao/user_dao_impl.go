@@ -15,40 +15,58 @@
 package dao
 
 import (
+	"context"
+
 	"template/domain/model"
 	"template/pkg/dto"
 
+	"github.com/phcp-tech/common-library-golang/dbsqlx"
 	libDto "github.com/phcp-tech/common-library-golang/dto"
+	"github.com/vinovest/sqlx"
 )
 
-type UserDao struct{}
+// compile-time interface check
+var _ IUserDao = (*UserDao)(nil)
 
-func NewUserDao() IUserDao {
-	return &UserDao{}
+type UserDao struct {
+	db *sqlx.DB
+}
+
+func NewUserDao(db *sqlx.DB) IUserDao {
+	return &UserDao{db: db}
 }
 
 // Get User list in data access layer
 func (d *UserDao) GetList(listPara *dto.UserListPara) (libDto.DataListResp, error) {
-	var users []model.User
-	user1 := model.User{
-		Id:       1,
-		Username: "Tom",
-		Nickname: "Tommy",
-		Email:    "tom@gmail.com",
-		Kind:     "Reader",
-		Status:   1}
-	user2 := model.User{
-		Id:       2,
-		Username: "Jerry",
-		Nickname: "Jerry",
-		Email:    "jerry@hotmail.com",
-		Kind:     "Author",
-		Status:   1}
-	users = append(users, user1, user2)
+	var liststr string = `SELECT id, username, nickname, email, kind, status FROM temp_users WHERE 1 = 1 `
+	var totalstr string = `SELECT COUNT(*) FROM temp_users WHERE 1 = 1 `
+	var sqlstr, pagestr string
+	var args []any
 
+	if listPara.Kind != "" {
+		sqlstr += " AND LOWER(TRIM(kind)) = LOWER(?)"
+		args = append(args, listPara.Kind)
+	}
+	// sorting + pagination
+	pagestr = dbsqlx.SortSql(&listPara.PageParameter) + dbsqlx.PageSql(&listPara.PageParameter)
+
+	ctx := context.Background()
+	var users []model.User
 	var list libDto.DataListResp
 	list.List = users
-	list.Total = 2
 
+	countQuery := d.db.Rebind(totalstr + sqlstr)
+	if err := d.db.GetContext(ctx, &list.Total, countQuery, args...); err != nil {
+		return list, err
+	}
+	if list.Total == 0 {
+		return list, nil
+	}
+
+	listQuery := d.db.Rebind(liststr + sqlstr + pagestr)
+	if err := d.db.SelectContext(ctx, &users, listQuery, args...); err != nil {
+		return list, err
+	}
+	list.List = users
 	return list, nil
 }
