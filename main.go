@@ -23,6 +23,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/phcp-tech/common-library-golang/bootstrap"
+	"github.com/phcp-tech/common-library-golang/dbsqlx"
 	dbComp "github.com/phcp-tech/common-library-golang/dbsqlx/postgres/component"
 	"github.com/phcp-tech/common-library-golang/env"
 	envComp "github.com/phcp-tech/common-library-golang/env/component"
@@ -58,7 +59,7 @@ func main() {
 // initial services
 func initServices() error {
 	// inject services to adapter layer for RESTful API
-	userService := service.NewUserService(dao.NewUserDao())
+	userService := service.NewUserService(dao.NewUserDao(dbsqlx.Default()))
 	adapter.Svcs = &adapter.Services{UserService: userService}
 
 	log.Info("All services initialized successfully")

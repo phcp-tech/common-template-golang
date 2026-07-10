@@ -22,8 +22,8 @@ import (
 	"template/pkg/dto"
 	"template/pkg/metrics"
 
+	"github.com/phcp-tech/common-library-golang/dbsqlx"
 	libDto "github.com/phcp-tech/common-library-golang/dto"
-	db "github.com/phcp-tech/common-library-golang/dbsqlc/postgres"
 	"github.com/phcp-tech/common-library-golang/errorcode"
 	"github.com/phcp-tech/common-library-golang/health"
 	"github.com/phcp-tech/common-library-golang/validator"
@@ -53,7 +53,7 @@ func MountUser(router *gin.Engine) *gin.Engine {
 	router.GET("/usrapi/v1/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
 			Code: errorcode.API_CODE_SUCCESS,
-			Data: health.Check(c.Request.Context(), db.HealthChecker())})
+			Data: health.Check(c.Request.Context(), dbsqlx.HealthChecker())})
 	})
 	router.GET("/usrapi/v1/metrics", func(c *gin.Context) {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
