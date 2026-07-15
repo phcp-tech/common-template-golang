@@ -52,11 +52,7 @@ func MountUser(router *gin.Engine) *gin.Engine {
 	})
 	router.GET("/usrapi/v1/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
-<<<<<<< HEAD
 			Code: errors.API_CODE_SUCCESS,
-=======
-			Code: errorcode.API_CODE_SUCCESS,
->>>>>>> origin/main
 			Data: health.Check(c.Request.Context(), dbsqlx.HealthChecker())})
 	})
 	router.GET("/usrapi/v1/metrics", func(c *gin.Context) {
