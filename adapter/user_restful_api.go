@@ -24,7 +24,7 @@ import (
 
 	"github.com/phcp-tech/common-library-golang/dbsqlx"
 	libDto "github.com/phcp-tech/common-library-golang/dto"
-	"github.com/phcp-tech/common-library-golang/errorcode"
+	"github.com/phcp-tech/common-library-golang/errors"
 	"github.com/phcp-tech/common-library-golang/health"
 	"github.com/phcp-tech/common-library-golang/validator"
 	"github.com/phcp-tech/common-library-golang/version"
@@ -47,17 +47,17 @@ func MountUser(router *gin.Engine) *gin.Engine {
 	// Don not need JWT authorization.
 	router.GET("/usrapi/v1/version", func(c *gin.Context) {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
-			Code: errorcode.API_CODE_SUCCESS,
+			Code: errors.API_CODE_SUCCESS,
 			Data: version.Get()})
 	})
 	router.GET("/usrapi/v1/healthz", func(c *gin.Context) {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
-			Code: errorcode.API_CODE_SUCCESS,
+			Code: errors.API_CODE_SUCCESS,
 			Data: health.Check(c.Request.Context(), dbsqlx.HealthChecker())})
 	})
 	router.GET("/usrapi/v1/metrics", func(c *gin.Context) {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
-			Code: errorcode.API_CODE_SUCCESS,
+			Code: errors.API_CODE_SUCCESS,
 			Data: metrics.GetMetrics()})
 	})
 
@@ -93,7 +93,7 @@ func getUserList(c *gin.Context) {
 	// get user list from service
 	if user, err := Svcs.UserService.GetList(&listPara); err == nil {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
-			Code: errorcode.API_CODE_SUCCESS,
+			Code: errors.API_CODE_SUCCESS,
 			Data: user})
 	} else {
 		c.JSON(http.StatusInternalServerError, libDto.ResponseMessage{Code: http.StatusInternalServerError, Message: err.Error()})
