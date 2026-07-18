@@ -20,7 +20,6 @@ import (
 	"template/domain/model"
 	"template/pkg/dto"
 
-	"github.com/phcp-tech/common-library-golang/dbsqlx"
 	libDto "github.com/phcp-tech/common-library-golang/dto"
 	"github.com/vinovest/sqlx"
 )
@@ -38,17 +37,10 @@ func NewUserDao(db *sqlx.DB) IUserDao {
 
 // Get User list in data access layer
 func (d *UserDao) GetList(listPara *dto.UserListPara) (libDto.DataListResp, error) {
-	var liststr string = `SELECT id, username, nickname, email, kind, status FROM temp_users WHERE 1 = 1 `
-	var totalstr string = `SELECT COUNT(*) FROM temp_users WHERE 1 = 1 `
+	var liststr string = `SELECT id, username, nickname, email, kind, status FROM users WHERE 1 = 1 `
+	var totalstr string = `SELECT COUNT(*) FROM users WHERE 1 = 1 `
 	var sqlstr, pagestr string
 	var args []any
-
-	if listPara.Kind != "" {
-		sqlstr += " AND LOWER(TRIM(kind)) = LOWER(?)"
-		args = append(args, listPara.Kind)
-	}
-	// sorting + pagination
-	pagestr = dbsqlx.SortSql(&listPara.PageParameter) + dbsqlx.PageSql(&listPara.PageParameter)
 
 	ctx := context.Background()
 	var users []model.User

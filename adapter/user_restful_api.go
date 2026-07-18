@@ -17,7 +17,6 @@ package adapter
 import (
 	"net/http"
 	"strconv"
-	"strings"
 
 	"template/pkg/dto"
 	"template/pkg/metrics"
@@ -26,7 +25,6 @@ import (
 	libDto "github.com/phcp-tech/common-library-golang/dto"
 	"github.com/phcp-tech/common-library-golang/errors"
 	"github.com/phcp-tech/common-library-golang/health"
-	"github.com/phcp-tech/common-library-golang/validator"
 	"github.com/phcp-tech/common-library-golang/version"
 
 	"github.com/gin-gonic/gin"
@@ -45,6 +43,11 @@ func MountUser(router *gin.Engine) *gin.Engine {
 	r1.GET("/list", getUserList)
 
 	// Don not need JWT authorization.
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, libDto.ResponseMessage{
+			Code: errors.API_CODE_SUCCESS,
+			Data: "OK"})
+	})
 	router.GET("/usrapi/v1/version", func(c *gin.Context) {
 		c.JSON(http.StatusOK, libDto.ResponseMessage{
 			Code: errors.API_CODE_SUCCESS,
@@ -71,7 +74,6 @@ func MountUser(router *gin.Engine) *gin.Engine {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param  kind query string false "user kind, default is all" Enums(Reader, Author, Admin)
 // @Success 200 {object} dto.UserListResp
 // @Failure 500 {object} dto.ResponseMessage
 // @Router /users/list [get]
@@ -82,13 +84,6 @@ func getUserList(c *gin.Context) {
 	listPara.Limit, _ = strconv.Atoi(c.Query("limit"))
 	listPara.Sort = c.Query("sort")
 	listPara.Direction = c.Query("direction")
-	listPara.Kind = strings.TrimSpace(c.Query("kind"))
-
-	// validate list parameters
-	if err := validator.Validator().Struct(&listPara); err != nil {
-		c.JSON(http.StatusBadRequest, libDto.ResponseMessage{Code: http.StatusBadRequest, Message: err.Error()})
-		return
-	}
 
 	// get user list from service
 	if user, err := Svcs.UserService.GetList(&listPara); err == nil {

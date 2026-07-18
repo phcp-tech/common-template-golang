@@ -53,6 +53,9 @@ RUN go env -w GOPRIVATE=github.com/phcp-tech
 # Download dependencies
 RUN go mod download
 
+# Run unit tests; any failure returns non-zero and aborts the build
+RUN GOEXPERIMENT=jsonv2 go test ./... -count=1 -timeout 5m
+
 # Build the Go app
 RUN GOEXPERIMENT=jsonv2,greenteagc CGO_ENABLED=1 GOOS=linux GOARCH=amd64 \
     go build -ldflags "-s -w"
