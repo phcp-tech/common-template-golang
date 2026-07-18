@@ -27,15 +27,4 @@ server.port = "8001"
 
 [db]
 # database sourece: postgres|mysql|sqlite
-sqlite.path = "sqlite.db"
-source = "postgres"
-host = "localhost"
-port = "5432"
-name = "TOBE_REPLACED"
-schema = "TOBE_REPLACED"
-username = "TOBE_REPLACED"
-password = "TOBE_REPLACED"
-max.open.conns = 3
-max.idle.conns = 1
-conn.max.lifetime = 10
-conn.max.idletime = 5
+sqlite.path = "./data/sqlite.db"

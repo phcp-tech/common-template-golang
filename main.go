@@ -24,7 +24,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/phcp-tech/common-library-golang/bootstrap"
 	"github.com/phcp-tech/common-library-golang/dbsqlx"
-	dbComp "github.com/phcp-tech/common-library-golang/dbsqlx/postgres/component"
+	dbComp "github.com/phcp-tech/common-library-golang/dbsqlx/sqlite/component"
 	"github.com/phcp-tech/common-library-golang/env"
 	envComp "github.com/phcp-tech/common-library-golang/env/component"
 	ginComp "github.com/phcp-tech/common-library-golang/gin/component"

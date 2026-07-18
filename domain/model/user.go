@@ -14,14 +14,13 @@
 
 package model
 
-// User domain model. Column sizes/defaults/indexes previously expressed via
-// gorm tags now live directly in the real schema, managed independently of
-// this application (there is no migrate() step in main.go).
+// User domain model. Column sizes/defaults/indexes live directly in the real
+// schema (config/schema_sqlite.sql), managed independently of this application.
 type User struct {
 	Id       int64  `db:"id" json:"id,omitempty"`
-	Username string `db:"username" json:"username,omitempty" validate:"omitempty,min=0,max=50"`
-	Nickname string `db:"nickname" json:"nickname,omitempty" validate:"omitempty,min=0,max=50"`
-	Email    string `db:"email" json:"email,omitempty" validate:"omitempty,email,min=0,max=50"`
-	Kind     string `db:"kind" json:"kind,omitempty" validate:"omitempty,min=0,max=40"`
-	Status   int    `db:"status" json:"status,omitempty" validate:"omitempty,gte=0,lte=3"`
+	Username string `db:"username" json:"username,omitempty"`
+	Nickname string `db:"nickname" json:"nickname,omitempty"`
+	Email    string `db:"email" json:"email,omitempty"`
+	Kind     string `db:"kind" json:"kind,omitempty"`
+	Status   string `db:"status" json:"status,omitempty"`
 }

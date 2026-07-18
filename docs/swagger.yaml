@@ -32,15 +32,11 @@ definitions:
       id:
         type: integer
       kind:
-        enum:
-        - Reader
-        - Author
-        - Admin
         type: string
       nickname:
         type: string
       status:
-        type: integer
+        type: string
       username:
         type: string
     type: object
@@ -51,15 +47,6 @@ paths:
     get:
       consumes:
       - application/json
-      parameters:
-      - description: user kind, default is all
-        enum:
-        - Reader
-        - Author
-        - Admin
-        in: query
-        name: kind
-        type: string
       produces:
       - application/json
       responses:

@@ -27,19 +27,6 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Query users list",
-                "parameters": [
-                    {
-                        "enum": [
-                            "Reader",
-                            "Author",
-                            "Admin"
-                        ],
-                        "type": "string",
-                        "description": "user kind, default is all",
-                        "name": "kind",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -107,18 +94,13 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "kind": {
-                    "type": "string",
-                    "enum": [
-                        "Reader",
-                        "Author",
-                        "Admin"
-                    ]
+                    "type": "string"
                 },
                 "nickname": {
                     "type": "string"
                 },
                 "status": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "username": {
                     "type": "string"
