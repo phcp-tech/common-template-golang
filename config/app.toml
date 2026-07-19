@@ -12,9 +12,6 @@ env.prefix = "TM_"
 # one of: ERROR, WARN, INFO, DEBUG
 level = "INFO"
 
-[jwt]
-secret.code = "TOBE_REPLACED"
-
 [cors]
 allow.origins = ["https://template.com"]
 
