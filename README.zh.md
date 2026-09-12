@@ -1,6 +1,8 @@
 # common-template-golang
 
-**语言:** [English](README.md) | 中文
+<p align="center">
+  <a href="./README.md">English</a> | <a href="./README.zh.md">简体中文</a>
+</p>
 
 一个基于 `common-library-golang` 构建的通用 Go 语言开发模板。
 
