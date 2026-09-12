@@ -1,6 +1,8 @@
 # common-template-golang
 
-**Language:** English | [中文](README-zh.md)
+<p align="center">
+  <a href="./README.md">English</a> | <a href="./README.zh.md">简体中文</a>
+</p>
 
 A common-perpose Go language development template build on `common-library-golang`.
 
