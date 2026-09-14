@@ -3,7 +3,7 @@
 # FROM alpine:3.18
 # RUN apk add -y --no-cache libc6-compat
 # FROM debian:12.2-slim
-FROM golang:1.25.0-bookworm AS builder
+FROM golang:1.27.1-bookworm AS builder
 MAINTAINER Gordon Wang@phcp-tech
 
 # Install git
@@ -54,10 +54,10 @@ RUN go env -w GOPRIVATE=github.com/phcp-tech
 RUN go mod download
 
 # Run unit tests; any failure returns non-zero and aborts the build
-RUN GOEXPERIMENT=jsonv2 go test ./... -count=1 -timeout 5m
+RUN go test ./... -count=1 -timeout 5m
 
 # Build the Go app
-RUN GOEXPERIMENT=jsonv2,greenteagc CGO_ENABLED=1 GOOS=linux GOARCH=amd64 \
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
     go build -ldflags "-s -w"
 
 # Compress the Go app
