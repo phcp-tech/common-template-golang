@@ -32,8 +32,8 @@ A common-perpose Go language development template build on `common-library-golan
 - `service/`  
   Service layer code implements the main business processes.
 
-- `CLAUDE.md`  
-  Guidance for Claude Code (and other AI coding assistants) working in this repository: project overview, build/test commands, and non-obvious implementation details worth knowing before making changes.
+- `AGENTS.md`  
+  Guidance for AI coding assistants working in this repository: project overview, build/test commands, and non-obvious implementation details worth knowing before making changes.
 
 - `Dockerfile`  
   Two-stage build: a builder stage compiles the app, and a final stage runs it on a slim base image.
