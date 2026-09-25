@@ -4,7 +4,7 @@ Guidance for AI coding agents (Claude Code, etc.) when working in this repositor
 
 ## Overview
 
-Go 1.26 module template for creating new Go modules with best practices: a single User entity showing the standard adapter → service → infra/dao → domain/model layering, Gin, SQLite via `dbsqlx` — raw SQL. `main.go` is the composition root, and the schema lives in `config/schema_sqlite.sql`, managed independently.
+Go 1.27.1 module template for creating new Go modules with best practices: a single User entity showing the standard adapter → service → infra/dao → domain/model layering, Gin, SQLite via `dbsqlx` — raw SQL. `main.go` is the composition root, and the schema lives in `config/schema_sqlite.sql`, managed independently.
 
 ## Commands
 
